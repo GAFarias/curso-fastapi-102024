@@ -10,3 +10,9 @@ git push -u origin main
 git remote add origin https://github.com/GAFarias/cifras-fastapi.git
 git branch -M main
 git push -u origin main
+
+
+subir cambios
+git add .
+git commit -m 'despliegue'
+git push

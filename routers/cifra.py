@@ -11,12 +11,12 @@ from fastapi import APIRouter
 
 routerCifra=APIRouter()
 
-class BearerJWT(HTTPBearer):
-    async def __call__(self, request: Request):
-        auth = await super().__call__(request)
-        data=validateToken(auth.credentials)
-        if data['email'] != 'pepe':
-            raise HTTPException(status_code=403, detail='Credenciales incorrectas')
+# class BearerJWT(HTTPBearer):
+#     async def __call__(self, request: Request):
+#         auth = await super().__call__(request)
+#         data=validateToken(auth.credentials)
+#         if data['email'] != 'pepe':
+#             raise HTTPException(status_code=403, detail='Credenciales incorrectas')
 
 class Cifra(BaseModel):
         id:Optional[int] = None
@@ -33,7 +33,8 @@ class Cifra(BaseModel):
         UltActu : str = Field(default='20250101120000',min_length=5, max_length=20)
 
 
-@routerCifra.get('/cifras', tags=['Cifras'], dependencies=[Depends(BearerJWT())])
+# @routerCifra.get('/cifras', tags=['Cifras'], dependencies=[Depends(BearerJWT())])
+@routerCifra.get('/cifras', tags=['Cifras'])
 def get_cifras():
     db = Session()
     data = db.query(ModelCifra).all()
