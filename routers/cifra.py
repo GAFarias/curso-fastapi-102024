@@ -64,14 +64,16 @@ def create_cifra(cifra : Cifra):
     return JSONResponse(content={'message': 'Se ha creado una nueva cifra'} )
 
 
-
-
-@routerCifra.delete('/movies/{idCine}', tags=['Cifras'])
+@routerCifra.delete('/cifras/{idCine}', tags=['Cifras'])
 def delete_cifra(idCine:int):
     db = Session()
     data = db.query(ModelCifra).filter(ModelCifra.idCine == idCine).all()
     if not data:
         return JSONResponse(status_code=404, content={'message': 'Recurso no encontrado'})
-    db.delete(data)
+    # db.delete(data)
+    # Iterar sobre los objetos y eliminarlos uno por uno
+    for cifra in data:
+        db.delete(cifra)
+        
     db.commit()
     return JSONResponse(content={'message': 'Recurso eliminado'})
