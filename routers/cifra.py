@@ -76,4 +76,4 @@ def delete_cifra(idCine:int):
         db.delete(cifra)
         
     db.commit()
-    return JSONResponse(content={'message': 'Recurso eliminado'})
+    return JSONResponse(content={'message': 'Cifras del cine eliminadas'})
