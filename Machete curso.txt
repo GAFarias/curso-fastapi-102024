@@ -1,0 +1,40 @@
+][¨*Para crear entorno virtual
+==========================
+- Abrir ventana de comandos en la carpeta donde estamos (powershell)
+- Escribir comando: py -m venv venv (el segundo venv es el nombre, es libre)
+- Nos crea una carpeta ven en este caso con el entorno, tenemos 2 batch activate y desactivate para activar o desactivar este entorno
+- Para activarlo vamos a venv/scripts y ejecutamos activate (cd venv/scripts      y    .\activate)
+-Instalo FstAPI y Uvicorn : pip install fastapi uvicorn
+- pip list me muestra las librerias instaladas
+
+Primer API
+==========
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get('/')
+def read_root():
+    return {'Hello':'World'}
+
+ejecutar el API: uvicorn main:app --reload // 
+cambiar de puerto: uvicorn main:app --reload --port 4000
+
+Instalar libreria para los webtoken
+Pip install PyJWT
+Probar jwt hay una web jwt.io
+
+Instalacion SQLAlchemy
+pip install SQLAlchemy
+
+Agregar extension SQLite Viewer
+
+Hacer un listado de las dependencias del proyecto
+Pip list
+Si corro:  python -m pip freeze > requirements.txt
+Me crea las dependencias en un archivo txt el cual depsues me sirve para el despliegue, por ejemplo en railway. Igual hay que tener cuidad con las versiones pq algunos servidores no las toman y hay que ajustar
+
+
+Aplicaciones Utiles
+Excalidraw.com   pizarra web
+Notion       crea espacios de trabajo, organiza, planifica
