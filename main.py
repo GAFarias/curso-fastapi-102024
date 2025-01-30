@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from bd.database import  engine, Base
 from routers.movie import routerMovie
+from routers.candy import routerCandy
 from routers.users import routerUser
 from routers.cifra import routerCifra
 from routers.cifra_anterior import routerCifraAnterior
@@ -16,6 +17,7 @@ app = FastAPI(
 )
 
 app.include_router(routerMovie)
+app.include_router(routerCandy)
 app.include_router(routerUser)
 app.include_router(routerCifra)
 app.include_router(routerCifraAnterior)
