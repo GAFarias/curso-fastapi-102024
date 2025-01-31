@@ -21,6 +21,7 @@ routerCandy=APIRouter()
 class Candy(BaseModel):
         id:Optional[int] = None
         idCine : int = Field(default=1)
+        cajaNro : int = Field(default=1)
         Fecha : str = Field(default='Fecha de la funcion',min_length=5, max_length=10)
         FormaPago  : str = Field(default='Forma de Pago',min_length=1, max_length=10)
         Total: float = Field(default=0.0)
@@ -36,10 +37,10 @@ def get_candys():
 
 
 
-@routerCandy.get('/candys/{id}', tags=['Candys'], status_code=200)
-def get_candys(id: int = Path(ge=1 , le=100)):
+@routerCandy.get('/candys/{idCine}', tags=['Candys'], status_code=200)
+def get_candys(idCine: int = Path(ge=1 , le=99999)):
     db = Session()
-    data = db.query(ModelCandy).filter(ModelCandy.id == id).first()
+    data = db.query(ModelCandy).filter(ModelCandy.idCine == idCine).all()
     if not data:
         return JSONResponse(status_code=404, content={'message': 'Recurso no encontrado'})
     return JSONResponse(status_code=200,  content = jsonable_encoder(data))
