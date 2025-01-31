@@ -21,7 +21,7 @@ routerCandy=APIRouter()
 class Candy(BaseModel):
         id:Optional[int] = None
         idCine : int = Field(default=1)
-        Puesto : int = Field(default=1)
+        quePuesto : int = Field(default=1)
         cajaNro : int = Field(default=1)
         Usuario : str = Field(default='Usuario cajero',min_length=1, max_length=15)
         Fecha : str = Field(default='Fecha de la funcion',min_length=5, max_length=10)
