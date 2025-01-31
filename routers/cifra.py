@@ -42,10 +42,18 @@ def get_cifras():
 
 
 
-@routerCifra.get('/cifras/{id}', tags=['Cifras'], status_code=200)
-def get_cifras(id: int = Path(ge=1 , le=100)):
+# @routerCifra.get('/cifras/{id}', tags=['Cifras'], status_code=200)
+# def get_cifras(id: int = Path(ge=1 , le=100)):
+#     db = Session()
+#     data = db.query(ModelCifra).filter(ModelCifra.id == id).first()
+#     if not data:
+#         return JSONResponse(status_code=404, content={'message': 'Recurso no encontrado'})
+#     return JSONResponse(status_code=200,  content = jsonable_encoder(data))
+
+@routerCifra.get('/cifras/{idCine}', tags=['Cifras'], status_code=200)
+def get_cifras(idCine: int = Path(ge=1 , le=100)):
     db = Session()
-    data = db.query(ModelCifra).filter(ModelCifra.id == id).first()
+    data = db.query(ModelCifra).filter(ModelCifra.idCine == idCine).all()
     if not data:
         return JSONResponse(status_code=404, content={'message': 'Recurso no encontrado'})
     return JSONResponse(status_code=200,  content = jsonable_encoder(data))
