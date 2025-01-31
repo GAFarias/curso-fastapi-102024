@@ -51,7 +51,7 @@ def get_cifras():
 #     return JSONResponse(status_code=200,  content = jsonable_encoder(data))
 
 @routerCifra.get('/cifras/{idCine}', tags=['Cifras'], status_code=200)
-def get_cifras(idCine: int = Path(ge=1 , le=100)):
+def get_cifras(idCine: int = Path(ge=1 , le=99999)):
     db = Session()
     data = db.query(ModelCifra).filter(ModelCifra.idCine == idCine).all()
     if not data:
