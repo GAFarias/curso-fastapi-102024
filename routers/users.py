@@ -42,8 +42,8 @@ def login(user:User):
         token:str = createToken(user.dict())    
         print(token)
         data.password=token
-        # return JSONResponse(status_code=200,  content = [jsonable_encoder(data),token])
-        return JSONResponse(content=token)
+        return JSONResponse(status_code=200,  content = [jsonable_encoder(data)])
+        # return JSONResponse(content=token)
     # return JSONResponse(status_code=200,  content = jsonable_encoder(data))
         # loguea = Loguea(
         #     token=token, 
