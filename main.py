@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from bd.database import  engine, Base
 from routers.movie import routerMovie
+from routers.empresa import routerEmpresa
 from routers.candy import routerCandy
+from routers.usuario import routerUsuario
 from routers.users import routerUser
 from routers.cifra import routerCifra
 from routers.cifra_anterior import routerCifraAnterior
@@ -21,6 +23,9 @@ app.include_router(routerCandy)
 app.include_router(routerUser)
 app.include_router(routerCifra)
 app.include_router(routerCifraAnterior)
+app.include_router(routerUsuario)
+app.include_router(routerEmpresa)
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -33,5 +38,7 @@ if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
 
+
+# uvicorn main:app --reload --port 4000
     
 

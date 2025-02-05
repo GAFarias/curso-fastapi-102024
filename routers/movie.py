@@ -15,7 +15,7 @@ class BearerJWT(HTTPBearer):
     async def __call__(self, request: Request):
         auth = await super().__call__(request)
         data=validateToken(auth.credentials)
-        if data['email'] != 'pepe':
+        if data['email'] != 'gaf':
             raise HTTPException(status_code=403, detail='Credenciales incorrectas')
 
 class Movie(BaseModel):
