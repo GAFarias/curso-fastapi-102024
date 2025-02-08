@@ -15,7 +15,10 @@ class BearerJWT(HTTPBearer):
     async def __call__(self, request: Request):
         auth = await super().__call__(request)
         data=validateToken(auth.credentials)
-        if data['email'] != 'gaf':
+        # Busca si el usuario es valido:
+        db = Session()
+        datausr = db.query(ModelUsuario).filter(ModelUsuario.nombre == data['email'] and ModelUsuario.password == data['password']).first()
+        if datausr is None:      
             raise HTTPException(status_code=403, detail='Credenciales incorrectas')
 
 
@@ -30,7 +33,7 @@ class Usuario(BaseModel):
         
 
 
-@routerUsuario.get('/usuarios', tags=['Usuarios'], dependencies=[Depends(BearerJWT())])
+@routerUsuario.get('/usuarios', tags=['Usuarios']) #, dependencies=[Depends(BearerJWT())])
 def get_usuarios():
     db = Session()
     data = db.query(ModelUsuario).all()

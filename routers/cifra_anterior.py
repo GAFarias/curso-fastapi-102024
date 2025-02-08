@@ -8,15 +8,19 @@ from bd.database import Session
 from models.cifras_anteriores import CifraAnterior as ModelCifraAnterior
 from fastapi.encoders import jsonable_encoder
 from fastapi import APIRouter
+from models.usuario import Usuario as ModelUsuario
 
 routerCifraAnterior=APIRouter()
 
-# class BearerJWT(HTTPBearer):
-#     async def __call__(self, request: Request):
-#         auth = await super().__call__(request)
-#         data=validateToken(auth.credentials)
-#         if data['email'] <>'gaf':
-#             raise HTTPException(status_code=403, detail='Credenciales incorrectas')
+class BearerJWT(HTTPBearer):
+    async def __call__(self, request: Request):
+        auth = await super().__call__(request)
+        data=validateToken(auth.credentials)
+        # Busca si el usuario es valido:
+        db = Session()
+        datausr = db.query(ModelUsuario).filter(ModelUsuario.nombre == data['email'] and ModelUsuario.password == data['password']).first()
+        if datausr is None:      
+            raise HTTPException(status_code=403, detail='Credenciales incorrectas')
 
 class CifraAnterior(BaseModel):
         id:Optional[int] = None
