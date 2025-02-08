@@ -26,7 +26,7 @@ class Empresa(BaseModel):
         id:Optional[int] = None
         cod_empresa: int = Field(ge=1 , le=999) 
         cod_cine: int = Field(ge=1 , le=999) 
-        nombre_cine: int = Field(default='Nombre del Cine',min_length=2, max_length=50)
+        nombre_cine: str = Field(default='Nombre del Cine',min_length=2, max_length=50)
         tiene_candy: int = Field(ge=0 , le=1) 
 
 
