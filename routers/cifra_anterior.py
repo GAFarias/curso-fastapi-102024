@@ -1,14 +1,26 @@
-from fastapi import  Path, Query,Request,HTTPException,Depends
+# from fastapi import  Path, Query,Request,HTTPException,Depends
+# from fastapi.responses import JSONResponse
+# from pydantic import BaseModel, Field
+# from typing import Optional
+# from user_jwt import validateToken
+# from fastapi.security import HTTPBearer
+# from bd.database import Session
+# from models.cifras_anteriores import CifraAnterior as ModelCifraAnterior
+# from fastapi.encoders import jsonable_encoder
+# from fastapi import APIRouter
+# from models.usuario import Usuario as ModelUsuario
+from fastapi import Path, Query, Request, HTTPException, Depends, APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from user_jwt import validateToken
 from fastapi.security import HTTPBearer
-from bd.database import Session
+from bd.database import Session, get_db  # Importa get_db
 from models.cifras_anteriores import CifraAnterior as ModelCifraAnterior
 from fastapi.encoders import jsonable_encoder
-from fastapi import APIRouter
 from models.usuario import Usuario as ModelUsuario
+from sqlalchemy import func, extract, and_  # Importa func, extract, and_
+from sqlalchemy import text  # Importa la función text para escribir SQL
 
 routerCifraAnterior=APIRouter()
 
@@ -44,16 +56,78 @@ def get_cifras_anteriores():
 
 
 
-@routerCifraAnterior.get('/cifrasanteriores/{id}', tags=['CifrasAnteriores'], status_code=200)
-def get_cifras_anteriores(id: int = Path(ge=1 , le=100)):
+# @routerCifraAnterior.get('/cifrasanteriores/{id}', tags=['CifrasAnteriores'], status_code=200)
+# def get_cifras_anteriores(id: int = Path(ge=1 , le=999999)):
+#     db = Session()
+#     data = db.query(ModelCifraAnterior).filter(ModelCifraAnterior.id == id).first()
+#     if not data:
+#         return JSONResponse(status_code=404, content={'message': 'Recurso no encontrado'})
+#     return JSONResponse(status_code=200,  content = jsonable_encoder(data))
+
+@routerCifraAnterior.get('/cifrasanteriores/{idCine}/dia_mes', tags=['CifrasAnteriores'])
+def get_cifras_anteriores_by_cine_dia_mes(
+    idCine: int = Path(ge=1, le=999999)    
+):
     db = Session()
-    data = db.query(ModelCifraAnterior).filter(ModelCifraAnterior.id == id).first()
+    with db:
+        sql = text("""  
+            SELECT  Dia AS dia, Mes as mes, SUM(Precio) AS total_precio, SUM(Tot) AS total_tot
+            FROM  cifra_anterior
+            WHERE    idCine = :idCine 
+            GROUP BY mes, dia
+            ORDER BY mes , dia
+        """)
+        result = db.execute(sql, {"idCine": idCine}).fetchall()  # Pasa los parámetros
+
+        # Formatea los resultados a un diccionario
+        formatted_result = [
+            {
+                "dia": row.dia,
+                "total_precio": row.total_precio,
+                "total_tot": row.total_tot,
+            }
+            for row in result
+        ]
+        return formatted_result
+
+@routerCifraAnterior.get('/cifrasanteriores/{idCine}/pelicula', tags=['CifrasAnteriores'])
+def get_cifras_anteriores_by_cine_pelicula(
+    idCine: int = Path(ge=1, le=999999)    
+):
+    db = Session()
+    with db:
+        sql = text("""  
+            SELECT  CodPelicula AS codpelicula, NomPelicula AS nompelicula, SUM(Precio) AS total_precio, SUM(Tot) AS total_tot
+            FROM  cifra_anterior
+            WHERE    idCine = :idCine 
+            GROUP BY CodPelicula, NomPelicula
+            ORDER BY NomPelicula
+        """)
+        result = db.execute(sql, {"idCine": idCine}).fetchall()  # Pasa los parámetros
+
+        # Formatea los resultados a un diccionario
+        formatted_result = [
+            {
+                "codPelicula": row.codpelicula,
+                "nomPelicula": row.nompelicula,
+                "total_precio": row.total_precio,
+                "total_tot": row.total_tot,
+            }
+            for row in result
+        ]
+        return formatted_result
+
+
+
+@routerCifraAnterior.get('/cifrasanteriores/{idCine}', tags=['CifrasAnteriores'], status_code=200)
+def get_cifras_anteriores_by_cine(idCine: int = Path(ge=1 , le=999999)):
+    db = Session()
+    data = db.query(ModelCifraAnterior).filter(ModelCifraAnterior.idCine == idCine).all()
     if not data:
         return JSONResponse(status_code=404, content={'message': 'Recurso no encontrado'})
     return JSONResponse(status_code=200,  content = jsonable_encoder(data))
 
 
- 
 
 @routerCifraAnterior.post('/cifrasanteriores', tags=['CifrasAnteriores'])
 def create_cifra_anterior(cifra_anterior : CifraAnterior):
