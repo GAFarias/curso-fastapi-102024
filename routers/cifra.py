@@ -33,7 +33,8 @@ class Cifra(BaseModel):
         CodPelicula  : str = Field(default='0',min_length=5, max_length=20)
         NomPelicula  : str = Field(default='Nombre de la pelicula',min_length=2, max_length=100)
         Precio: float = Field(default=0.0)
-        Tot : int = Field(default=1)
+        Tot : int = Field(default=0)
+        TotWeb : int = Field(default=0)
         UltActu : str = Field(default='20250101120000',min_length=5, max_length=20)
 
 

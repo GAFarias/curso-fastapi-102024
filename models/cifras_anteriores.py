@@ -13,4 +13,5 @@ class CifraAnterior(Base):
     NomPelicula = Column(String)
     Precio = Column(Float)
     Tot = Column(Integer)
+    TotWeb = Column(Integer)
     

@@ -44,6 +44,7 @@ class CifraAnterior(BaseModel):
         NomPelicula  : str = Field(default='Nombre de la pelicula',min_length=2, max_length=100)
         Precio: float = Field(default=0.0)
         Tot : int = Field(default=1)
+        TotWeb : int = Field(default=0)
 
 
 
@@ -71,7 +72,7 @@ def get_cifras_anteriores_by_cine_dia_mes(
     db = Session()
     with db:
         sql = text("""  
-            SELECT  Dia AS dia, Mes as mes, SUM(Precio) AS total_precio, SUM(Tot) AS total_tot
+            SELECT  Dia AS dia, Mes as mes, SUM(Precio) AS total_precio, SUM(Tot) AS total_tot, SUM(TotWeb) AS total_totweb
             FROM  cifra_anterior
             WHERE    idCine = :idCine 
             GROUP BY mes, dia
@@ -85,6 +86,7 @@ def get_cifras_anteriores_by_cine_dia_mes(
                 "dia": row.dia,
                 "total_precio": row.total_precio,
                 "total_tot": row.total_tot,
+                "total_totweb": row.total_totweb,
             }
             for row in result
         ]
@@ -97,7 +99,7 @@ def get_cifras_anteriores_by_cine_pelicula(
     db = Session()
     with db:
         sql = text("""  
-            SELECT  CodPelicula AS codpelicula, NomPelicula AS nompelicula, SUM(Precio) AS total_precio, SUM(Tot) AS total_tot
+            SELECT  CodPelicula AS codpelicula, NomPelicula AS nompelicula, SUM(Precio) AS total_precio, SUM(Tot) AS total_tot, SUM(TotWeb) AS total_totweb
             FROM  cifra_anterior
             WHERE    idCine = :idCine 
             GROUP BY CodPelicula, NomPelicula
@@ -112,6 +114,7 @@ def get_cifras_anteriores_by_cine_pelicula(
                 "nomPelicula": row.nompelicula,
                 "total_precio": row.total_precio,
                 "total_tot": row.total_tot,
+                "total_totweb": row.total_totweb,
             }
             for row in result
         ]

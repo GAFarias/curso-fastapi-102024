@@ -4,7 +4,7 @@ from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 
-sqliteName = 'movies.sqlite'
+sqliteName = 'cifras.sqlite'
 base_dir = os.path.dirname(os.path.realpath(__file__))
 datebaseUrl = f"sqlite:///{os.path.join(base_dir, sqliteName)}"
 
